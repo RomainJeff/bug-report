@@ -9,6 +9,7 @@
   "author": "Romain QUILLIOT",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.4.3"
+    "express": "^4.4.3",
+    "mysql": "^2.3.2"
   }
 }
