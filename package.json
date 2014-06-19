@@ -1,0 +1,11 @@
+{
+  "name": "BugReport",
+  "version": "1.0.0",
+  "description": "Bug reporting system",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Romain QUILLIOT",
+  "license": "ISC"
+}
