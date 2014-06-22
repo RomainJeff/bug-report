@@ -69,53 +69,17 @@ app.get('/bugs', function (req, res)
 {
     var options = [];
 
-    if (req.query.UDID) {
-        options[options.length] = {
-            name: "UDID",
-            value: req.query.UDID
-        };
-    }
+    if (req.query.filters) {
+        var filters = req.query.filters.split(',');
 
-    if (req.query.priority) {
-        options[options.length] = {
-            name: "priority",
-            value: req.query.priority
-        };
-    }
+        for (var i = 0; i < filters.length; i++) {
+            var currentFilter = filters[i].split(':');
 
-    if (req.query.type) {
-        options[options.length] = {
-            name: "type",
-            value: req.query.type
-        };
-    }
-
-    if (req.query.platform) {
-        options[options.length] = {
-            name: "platform",
-            value: req.query.platform
-        };
-    }
-
-    if (req.query.platform_version) {
-        options[options.length] = {
-            name: "platform_version",
-            value: req.query.platform_version
-        };
-    }
-
-    if (req.query.app_version) {
-        options[options.length] = {
-            name: "app_version",
-            value: req.query.app_version
-        };
-    }
-
-    if (req.query.message) {
-        options[options.length] = {
-            name: "message",
-            value: req.query.message
-        };
+            options[options.length] = {
+                name: currentFilter[0],
+                value: currentFilter[1]
+            };
+        }
     }
 
     bugsModel.get(options, function (results) {
