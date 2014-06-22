@@ -1,8 +1,8 @@
 module.exports = {
     mysql: {
-        host: "localhost",
-        user: "root",
-        pass: "root",
-        base: "bugs"
+        host    : "localhost",
+        user    : "root",
+        password: "root",
+        database: "bugreport"
     }
 };
