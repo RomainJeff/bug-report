@@ -57,6 +57,29 @@ app.use(methodOverride());
 
 /***************************/
 /**
+ * Initialise les headers
+ */
+/***************************/
+function sendSuccess(datas)
+{
+    return JSON.stringify({
+        error: false,
+        datas: datas
+    });
+}
+
+function sendError(message)
+{
+    return JSON.stringify({
+        error: true,
+        message: message
+    });
+}
+
+
+
+/***************************/
+/**
  * Url de l'application
  */
 /***************************/
@@ -86,15 +109,12 @@ app.get('/bugs', function (req, res)
     bugsModel.get(options,
         function (results) {
             res.send(
-                JSON.stringify(results)
+                sendSuccess(results)
             );
         },
         function (message) {
             res.send(
-                JSON.stringify({
-                    error: true,
-                    message: message
-                })
+                sendError(message)
             );
         }
     );
