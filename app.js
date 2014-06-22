@@ -64,6 +64,7 @@ app.use(methodOverride());
 /**
  * Recupere les bugs
  * GET /bugs
+ * ?filters=name:value,name2:value2
  */
 app.get('/bugs', function (req, res)
 {
@@ -82,11 +83,21 @@ app.get('/bugs', function (req, res)
         }
     }
 
-    bugsModel.get(options, function (results) {
-        res.send(
-            JSON.stringify(results)
-        );
-    });
+    bugsModel.get(options,
+        function (results) {
+            res.send(
+                JSON.stringify(results)
+            );
+        },
+        function (message) {
+            res.send(
+                JSON.stringify({
+                    error: true,
+                    message: message
+                })
+            );
+        }
+    );
 });
 
 

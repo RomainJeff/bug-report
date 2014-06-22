@@ -6,7 +6,7 @@ module.exports = {
         this.connection = mysql;
     },
 
-    get: function(options, success)
+    get: function(options, successCallback, errorCallback)
     {
         var where = "";
 
@@ -30,10 +30,11 @@ module.exports = {
         {
             if (error) {
                 console.log("Erreur SQL");
+                errorCallback("Erreur de requete SQL");
                 return false;
             }
 
-            success(results);
+            successCallback(results);
         });
 
     }
