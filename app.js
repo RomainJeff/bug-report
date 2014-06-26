@@ -159,7 +159,7 @@ app.get('/bugs', function (req, res)
  * &plateforme=true     Informations concernant les plateformes touchees
  * &last_seen=true      Date de la derniere apparition du bug
  * &version=true        Infos sur les versions de l'app touchees
- * &evolution=month     Evolution du bug (nombre de bugs & utilisateur touches) (day, week, month)
+ * &evolution=day       Evolution du bug (nombre de bugs & utilisateur touches) (day, week, month)
  */
 app.get('/stats/:type/:message', function (req, res)
 {
