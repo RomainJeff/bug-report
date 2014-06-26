@@ -57,7 +57,7 @@ app.use(methodOverride());
 
 /***************************/
 /**
- * Initialise les headers
+ * Methodes utiles
  */
 /***************************/
 function sendSuccess(datas)
@@ -65,7 +65,16 @@ function sendSuccess(datas)
     return JSON.stringify({
         error: false,
         datas: datas
-    });
+    }, null, 4);
+}
+
+function sendSuccessNext(datas, next)
+{
+    return JSON.stringify({
+        error: false,
+        datas: datas,
+        next: next
+    }, null, 4);
 }
 
 function sendError(message)
@@ -73,7 +82,13 @@ function sendError(message)
     return JSON.stringify({
         error: true,
         message: message
-    });
+    }, null, 4);
+}
+
+function deleteQuotes(string)
+{
+    string = string.replace(/'/g, "");
+    return string.replace(/"/g, "");
 }
 
 
@@ -88,28 +103,43 @@ function sendError(message)
  * Recupere les bugs
  * GET /bugs
  * ?filters=name:value,name2:value2
+ * &rows=rowName,rowName2
+ * &offset=1
  */
 app.get('/bugs', function (req, res)
 {
     var options = [];
 
+    /** FILTERS **/
     if (req.query.filters) {
         var filters = req.query.filters.split(',');
 
         for (var i = 0; i < filters.length; i++) {
             var currentFilter = filters[i].split(':');
 
-            options[options.length] = {
+            options["filters"][options.filters.length] = {
                 name: currentFilter[0],
                 value: currentFilter[1]
             };
         }
     }
 
+    /** ROWS **/
+    if (req.query.rows) {
+        options.rows = deleteQuotes(req.query.rows);
+    }
+
+    /** PAGINATION **/
+    if (req.query.offset) {
+        options.currentPage = deleteQuotes(req.query.offset);
+    }
+    options.dataDisplayedPerPage = 10;
+
+
     bugsModel.get(options,
-        function (results) {
+        function (results, next) {
             res.send(
-                sendSuccess(results)
+                sendSuccessNext(results, next)
             );
         },
         function (message) {
