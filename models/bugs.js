@@ -68,7 +68,7 @@ module.exports = {
         var queryToExe = queryText +" LIMIT "+ start +","+ options.dataDisplayedPerPage;
         var connection = this.connection;
 
-        this.connection.query(queryToExe, function (error, rows, results)
+        connection.query(queryToExe, function (error, rows, results)
         {
             if (error) {
                 console.log("Erreur SQL");
@@ -80,10 +80,14 @@ module.exports = {
             start = (options.currentPage) * options.dataDisplayedPerPage;
             queryToExe = queryText +" LIMIT "+ start +","+ options.dataDisplayedPerPage;
             
+            // On effectue la prochaine requete afin de savoir si 
+            // il y a une page suivante
             connection.query(queryToExe, function (error, rowsSecond) {
                 var next = false;
 
-                if (rowsSecond.length > 0) {
+                // Si des donnees sont retournees il y a
+                // une page suivante
+                if (!error && rowsSecond.length > 0) {
                     next = true;
                 }
 
