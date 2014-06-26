@@ -102,9 +102,9 @@ function deleteQuotes(string)
 /**
  * Recupere les bugs
  * GET /bugs
- * ?filters=name:value,name2:value2
- * &rows=rowName,rowName2
- * &offset=1
+ * ?filters=name:value,name2:value2     Filtrer les bugs
+ * &rows=rowName,rowName2               Informations voulues
+ * &offset=1                            Numero de la page
  */
 app.get('/bugs', function (req, res)
 {
@@ -148,6 +148,22 @@ app.get('/bugs', function (req, res)
             );
         }
     );
+});
+
+
+/**
+ * Recupere les stats d'un bug
+ * get /bugs/:type/:message
+ * ?users=true          Nombre d'utilisateurs touches par le bug
+ * &reproduction=true   Nombre total de reproduction du bug
+ * &plateforme=true     Informations concernant les plateformes touchees
+ * &last_seen=true      Date de la derniere apparition du bug
+ * &version=true        Infos sur les versions de l'app touchees
+ * &evolution=month     Evolution du bug (nombre de bugs & utilisateur touches) (day, week, month)
+ */
+app.get('/stats/:type/:message', function (req, res)
+{
+    
 });
 
 
