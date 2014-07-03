@@ -12,6 +12,7 @@ var mysql           = require('mysql');
 var config          = require("./config.js");
 
 var bugsModel       = require("./models/bugs.js");
+var trackersModel   = require("./models/trackers.js");
 
 
 
@@ -41,6 +42,7 @@ var connection = mysql.createConnection(config.mysql);
 connection.connect();
 
 bugsModel.init(connection);
+trackersModel.init(connection);
 
 
 
@@ -305,7 +307,57 @@ app.get('/trackers', function (req, res)
  */
 app.post('/trackers', function (req, res)
 {
-    
+    var app_version         = deleteQuotes(req.body.app_version);
+    var plateforme          = deleteQuotes(req.body.plateforme);
+    var plateforme_version  = deleteQuotes(req.body.plateforme_version);
+    var action              = deleteQuotes(req.body.action);
+    var feature             = deleteQuotes(req.body.feature);
+    var udid                = deleteQuotes(req.body.udid);
+    var timestamp           = new Date().getTime();
+
+    trackersModel.add([
+        {
+            name    : "UDID",
+            value   : udid
+        },
+        {
+            name    : "feature",
+            value   : feature
+        },
+        {
+            name    : "action",
+            value   : action
+        },
+        {
+            name    : "app_version",
+            value   : app_version
+        },
+        {
+            name    : "platform",
+            value   : plateforme
+        },
+        {
+            name    : "platform_version",
+            value   : plateforme_version
+        },
+        {
+            name    : "timestamp",
+            value   : timestamp
+        }
+    ],
+        function ()
+        {
+            res.send(
+                sendSuccess("L'evenement a bien été ajouté")
+            );
+        },
+        function (message)
+        {
+            res.send(
+                sendError(message)
+            );
+        }
+    );
 });
 
 
