@@ -113,6 +113,7 @@ app.get('/bugs', function (req, res)
     /** FILTERS **/
     if (req.query.filters) {
         var filters = req.query.filters.split(',');
+        options.filters = [];
 
         for (var i = 0; i < filters.length; i++) {
             var currentFilter = filters[i].split(':');
@@ -163,6 +164,32 @@ app.get('/bugs', function (req, res)
  */
 app.get('/stats/:type/:message', function (req, res)
 {
+    var options = [];
+
+    if (req.query.users) {
+        options.users = req.query.users;
+    }
+
+    if (req.query.reproduction) {
+        options.reproduction = req.query.reproduction;
+    }
+
+    if (req.query.plateforme) {
+        options.plateforme = req.query.plateforme;
+    }
+
+    if (req.query.last_seen) {
+        options.last_seen = req.query.last_seen;
+    }
+
+    if (req.query.version) {
+        options.version = req.query.version;
+    }
+
+    if (req.query.evolution) {
+        options.evolution = req.query.evolution;
+    }
+
     
 });
 
@@ -173,7 +200,62 @@ app.get('/stats/:type/:message', function (req, res)
  */
 app.post('/bugs', function (req, res)
 {
-    
+    var app_version         = deleteQuotes(req.body.app_version);
+    var plateforme          = deleteQuotes(req.body.plateforme);
+    var plateforme_version  = deleteQuotes(req.body.plateforme_version);
+    var priority            = deleteQuotes(req.body.priority);
+    var type                = deleteQuotes(req.body.type);
+    var message             = deleteQuotes(req.body.message);
+    var udid                = deleteQuotes(req.body.udid);
+    var timestamp           = new Date().getTime();
+
+    bugsModel.add([
+        {
+            name    : "app_version",
+            value   : app_version
+        },
+        {
+            name    : "platform",
+            value   : plateforme
+        },
+        {
+            name    : "platform_version",
+            value   : plateforme_version
+        },
+        {
+            name    : "priority",
+            value   : priority
+        },
+        {
+            name    : "type",
+            value   : type
+        },
+        {
+            name    : "message",
+            value   : message
+        },
+        {
+            name    : "UDID",
+            value   : udid
+        },
+        {
+            name    : "timestamp",
+            value   : timestamp
+        }
+    ],
+        function ()
+        {
+            res.send(
+                sendSuccess("Le bug a bien été envoyé")
+            );
+        },
+        function (message)
+        {
+            res.send(
+                sendError(message)
+            );
+        }
+    );
 });
 
 
