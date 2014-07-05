@@ -415,4 +415,4 @@ app.post('/trackers', verifyPrivateKey, function (req, res)
  */
 /***************************/
 console.log("Application up !");
-app.listen(3000);
+app.listen(process.env.PORT || 3000);
