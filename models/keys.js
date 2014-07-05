@@ -8,9 +8,15 @@ module.exports = {
 
     exists : function (key, successCallback, errorCallback)
     {
-        this.connection.query("SELECT COUNT(id) FROM keys WHERE api_key = '"+ key +"'", function (error, rows)
+        this.connection.query("SELECT id FROM keys WHERE api_key = '"+ key +"'", function (error, rows)
         {
             if (error) {
+                errorCallback("La clee passée est invalide");
+
+                return false;
+            }
+
+            if (rows.length <= 0) {
                 errorCallback("La clee passée est invalide");
 
                 return false;
