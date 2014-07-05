@@ -13,6 +13,7 @@ var config          = require("./config.js");
 
 var bugsModel       = require("./models/bugs.js");
 var trackersModel   = require("./models/trackers.js");
+var keyModel        = require("./models/keys.js");
 
 
 
@@ -35,6 +36,41 @@ var initHeaders = function (req, res, next)
 
 /***************************/
 /**
+ * Verifie l'authenticite des clees
+ */
+/***************************/
+var verifyPrivateKey = function (req, res, next)
+{
+    var key = deleteQuotes(req.query.key);
+
+    if (!key) {
+        res.send(
+            401,
+            sendError("La clée passée est invalide")
+        );
+        return false;
+    }
+
+    // On verifie l'existance de la clée dans la base de données
+    keyModel.exists(key,
+        function (){
+            next();
+        },
+
+        function (message)
+        {
+            res.send(
+                401,
+                sendError(message)
+            );
+        }
+    );
+}
+
+
+
+/***************************/
+/**
  * Initialise la connexion MySQL
  */
 /***************************/
@@ -43,6 +79,7 @@ connection.connect();
 
 bugsModel.init(connection);
 trackersModel.init(connection);
+keyModel.init(connection);
 
 
 
@@ -200,7 +237,7 @@ app.get('/stats/:type/:message', function (req, res)
  * Poste un bug
  * POST /bugs
  */
-app.post('/bugs', function (req, res)
+app.post('/bugs', verifyPrivateKey, function (req, res)
 {
     var app_version         = deleteQuotes(req.body.app_version);
     var plateforme          = deleteQuotes(req.body.plateforme);
@@ -305,7 +342,7 @@ app.get('/trackers', function (req, res)
  * Poste un nouvel evenement
  * POST /trackers
  */
-app.post('/trackers', function (req, res)
+app.post('/trackers', verifyPrivateKey, function (req, res)
 {
     var app_version         = deleteQuotes(req.body.app_version);
     var plateforme          = deleteQuotes(req.body.plateforme);
@@ -313,6 +350,7 @@ app.post('/trackers', function (req, res)
     var action              = deleteQuotes(req.body.action);
     var feature             = deleteQuotes(req.body.feature);
     var udid                = deleteQuotes(req.body.udid);
+    var note                = deleteQuotes(req.body.note);
     var timestamp           = new Date().getTime();
 
     trackersModel.add([
@@ -339,6 +377,10 @@ app.post('/trackers', function (req, res)
         {
             name    : "platform_version",
             value   : plateforme_version
+        },
+        {
+            name    : "note",
+            value   : note
         },
         {
             name    : "timestamp",
