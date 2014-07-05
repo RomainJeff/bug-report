@@ -355,7 +355,7 @@ app.post('/trackers', verifyPrivateKey, function (req, res)
     if (req.body.note) {
         var note            = deleteQuotes(req.body.note);
     } else {
-        var note            = null;
+        var note            = "";
     }
 
     trackersModel.add([
