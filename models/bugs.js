@@ -64,7 +64,7 @@ module.exports = {
         }
 
 
-        var queryText  = "SELECT "+ options.rows +" AS total_entries FROM bugs "+ where +" GROUP BY message, type ORDER BY priority DESC, timestamp ASC";
+        var queryText  = "SELECT "+ options.rows +" FROM bugs "+ where +" GROUP BY message, type ORDER BY priority DESC, timestamp ASC";
         var queryToExe = queryText +" LIMIT "+ start +","+ options.dataDisplayedPerPage;
         var connection = this.connection;
 
