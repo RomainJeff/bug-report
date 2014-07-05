@@ -350,8 +350,13 @@ app.post('/trackers', verifyPrivateKey, function (req, res)
     var action              = deleteQuotes(req.body.action);
     var feature             = deleteQuotes(req.body.feature);
     var udid                = deleteQuotes(req.body.udid);
-    var note                = deleteQuotes(req.body.note);
     var timestamp           = new Date().getTime();
+
+    if (req.body.note) {
+        var note            = deleteQuotes(req.body.note);
+    } else {
+        var note            = null;
+    }
 
     trackersModel.add([
         {
