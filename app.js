@@ -41,15 +41,15 @@ var initHeaders = function (req, res, next)
 /***************************/
 var verifyPrivateKey = function (req, res, next)
 {
-    var key = deleteQuotes(req.query.key);
-
-    if (!key) {
+    if (!req.query.key) {
         res.send(
             401,
             sendError("La clée passée est invalide")
         );
         return false;
     }
+
+    var key = deleteQuotes(req.query.key);
 
     // On verifie l'existance de la clée dans la base de données
     keyModel.exists(key,
