@@ -126,8 +126,12 @@ function sendError(message)
 
 function deleteQuotes(string)
 {
-    string = string.replace(/'/g, "");
-    return string.replace(/"/g, "");
+    if (typeof string == 'string' || string instanceof String) {
+        string = string.replace(/'/g, "");
+        string = string.replace(/"/g, "");
+    }
+
+    return string;
 }
 
 
